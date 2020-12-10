@@ -128,38 +128,46 @@ end
 
 require 'pry'
 
-def num_points_scored(player_search)
-  game_hash.each do |team, team_info|
-    team_info[:players].each do |player|
-      if player[:player_name] == player_search
-        return player[:points]
-      end
-    end
+def players
+  game_hash[:home][:players].concat game_hash[:away][:players]
+end
+
+def find_player(player_name)
+  found_player = players.find do |player|
+    player[:player_name] == player_name
   end
 end
 
-def shoe_size(kicks)
-  game_hash.each do |team, team_info|
-    team_info[:players].each do |player|
-      if player[:player_name] == kicks
-        return player[:shoe]
-      end
+def find_team(team_name)
+    game_hash.values.find do |team|
+      team_name == team[:team_name]
     end
-  end
 end
 
 def team_colors(team_data)
-  if team_data.downcase == "brooklyn nets"
-    return game_hash[:home][:colors]
-  else return game_hash[:away][:colors]
-  end
+  find_team(team_name)[:colors]
 end
 
-def team_names
-  game_hash.map do |team, team_info|
-    team_info[:team_name]
-  end
+def num_points_scored(player_name)
+  find_player(player_name)[:points]
 end
+
+def shoe_size(player_name)
+  find_player(player_name)[:shoe]
+end
+
+
+
+
+
+
+
+def team_names
+  names = []
+  names[0] = game_hash[:home][:team_name]
+  names[1] = game_hash[:away][:team_name]
+end
+
 
 def player_numbers(jersey)
   output = []
